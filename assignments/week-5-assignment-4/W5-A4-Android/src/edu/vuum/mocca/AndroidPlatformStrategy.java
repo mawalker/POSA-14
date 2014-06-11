@@ -3,8 +3,6 @@ package edu.vuum.mocca;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.CountDownLatch;
 
-import android.app.Activity;
-import android.widget.TextView;
 import android.util.Log;
 
 /**
@@ -16,24 +14,14 @@ import android.util.Log;
  *        "Concrete Strategy" in the Strategy pattern.
  */
 public class AndroidPlatformStrategy extends PlatformStrategy
-{	
-    /** TextViewVariable. */
-    private TextView mTextViewOutput;
-	
+{   
     /** Activity variable finds gui widgets by view. */
-    private WeakReference<Activity> mActivity;
+    private WeakReference<OutputTextViewActivity> mActivity;
 
-    public AndroidPlatformStrategy(Object output,
-                                   final Object activityParam)
+    public AndroidPlatformStrategy(final OutputTextViewActivity activityParam)
     {
-        /**
-         * A textview output which displays calculations and
-         * expression trees.
-         */
-        mTextViewOutput = (TextView) output;
-
-        /** The current activity window (succinct or verbose). */
-        mActivity = new WeakReference<Activity>((Activity) activityParam);
+          /** The current activity window (succinct or verbose). */
+        mActivity = new WeakReference<OutputTextViewActivity>(activityParam);
     }
 
     /**
@@ -61,7 +49,7 @@ public class AndroidPlatformStrategy extends PlatformStrategy
 
     /** Indicate that a game thread has finished running. */
     public void done()
-    {	
+    {   
         // TODO - You fill in here.
     }
 

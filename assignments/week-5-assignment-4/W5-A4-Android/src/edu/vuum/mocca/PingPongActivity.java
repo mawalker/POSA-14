@@ -1,6 +1,5 @@
 package edu.vuum.mocca;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +10,7 @@ import android.widget.TextView;
  * 
  * @brief Initial start up screen for the android GUI.
  */
-public class PingPongActivity extends Activity {
+public class PingPongActivity extends OutputTextViewActivity {
     /** TextView that PingPong will be "played" upon */
     private TextView mAndroidPingPongOutput;
 
@@ -28,19 +27,16 @@ public class PingPongActivity extends Activity {
 
         // Sets the content view to the xml file, activity_ping_pong.
         setContentView(R.layout.activity_ping_pong);
-        mAndroidPingPongOutput =
-            (TextView) findViewById(R.id.pingpong_output);
+        mAndroidPingPongOutput = (TextView) findViewById(R.id.pingpong_output);
         mPlayButton = (Button) findViewById(R.id.play_button);
 
         // Initializes the Platform singleton with the appropriate
         // Platform strategy, which in this case will be the
         // AndroidPlatform.
-        PlatformStrategy.instance
-            (new PlatformStrategyFactory
-             (mAndroidPingPongOutput,
-              this).makePlatformStrategy());
+        PlatformStrategy.instance(new PlatformStrategyFactory(this)
+                .makePlatformStrategy());
 
-        // Initializes the Options singleton. 
+        // Initializes the Options singleton.
         Options.instance().parseArgs(null);
     }
 
@@ -49,11 +45,10 @@ public class PingPongActivity extends Activity {
         if (mGameState == PLAY) {
             // Use a factory method to create the appropriate type of
             // OutputStrategy.
-            PlayPingPong pingPong =
-                new PlayPingPong(PlatformStrategy.instance(),
-                                 Options.instance().maxIterations(),
-                                 Options.instance().maxTurns(),
-                                 Options.instance().syncMechanism());
+            PlayPingPong pingPong = new PlayPingPong(
+                    PlatformStrategy.instance(), Options.instance()
+                            .maxIterations(), Options.instance().maxTurns(),
+                    Options.instance().syncMechanism());
 
             // Play ping-pong with the designated number of
             // iterations.
@@ -72,5 +67,13 @@ public class PingPongActivity extends Activity {
             mAndroidPingPongOutput.setText("Unknown State entered!");
             mGameState = RESET;
         }
+    }
+
+    /**
+     * grant access of the Output TextView to the AndroidPlatformStrategy
+     */
+    @Override
+    TextView getOutputTextView() {
+        return mAndroidPingPongOutput;
     }
 }
